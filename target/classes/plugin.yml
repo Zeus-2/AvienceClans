@@ -1,0 +1,23 @@
+name: avienceclans
+version: '${project.version}'
+main: org.avience.avienceclans.Avienceclans
+api-version: '1.20'
+description: A plugin for managing Minecraft clans.
+
+commands:
+  clan:
+    description: Clan management command.
+    usage: /<command> [sub-command] [arguments]
+    aliases: [clans]
+    sub-commands:
+      create: "Create a new clan."
+      add: "Add a player to your clan."
+      promote: "Promote a member in your clan."
+      kick: "Kick a member from your clan."
+      demote: "Demote a member in your clan."
+      transfer: "Transfer clan ownership."
+      info: "Display clan information."
+      invite: "Invite a player to your clan."
+      uninvite: "Uninvite a player from your clan."
+      clearinvites: "Clear all pending invites for your clan."
+      join: "Join a clan you've been invited to."
