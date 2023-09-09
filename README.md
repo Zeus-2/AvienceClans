@@ -43,7 +43,8 @@ avienceclans.delete	Allows deleting a clan.
 avienceclans.invite	Allows inviting players to a clan.
 avienceclans.kick	Allows kicking members from a clan.
 avienceclans.admin	Grants all permissions.
-##⚙️ Configuration
+
+## ⚙️ Configuration
 The plugin uses a YAML configuration file which you can find in the plugins/AvienceClans directory after the first run. You can customize various settings like clan size limits, clan name restrictions, etc.
 
 ## 🤝 Contributing
