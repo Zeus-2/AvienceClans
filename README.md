@@ -11,7 +11,7 @@ Clan Info: View detailed information about any clan.
 And More: Many more features to explore!
 
 ## 📦 Installation
-Download the latest release from the downloads folder
+Download the latest release from the releases tab on the side
 Place the downloaded .jar file into your server's plugins folder.
 Restart your server.
 bash
