@@ -12,13 +12,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.Locale;
-import java.util.List;
-@SuppressWarnings("deprecation")
+
 public class ClanCommand implements CommandExecutor, TabCompleter {
 
     private final HashMap<String, String> pendingDeletes = new HashMap<>();
-    private Avienceclans plugin;
+    private final Avienceclans plugin;
 
     public ClanCommand(Avienceclans plugin) {
         this.plugin = plugin;
@@ -74,19 +72,16 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
 
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            // Rest of your code that uses 'player' here
-        } else {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage("This command can only be used by players.");
+            return true;
         }
 
         assert sender instanceof Player;
         Player player = (Player) sender;
         FileConfiguration clanConfig = plugin.getClanConfig();
         ConfigurationSection clansSection = clanConfig.getConfigurationSection("clans");
-        List<String> ranks = Arrays.asList("player", "moderator", "admin");
 
         if (args.length == 0 || "help".equalsIgnoreCase(args[0])) {
             int page = 1;
@@ -148,8 +143,9 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
             }
 
             // Check if the player is not already in a clan
+            assert clansSection != null;
             for (String existingClan : clansSection.getKeys(false)) {
-                if (clanConfig.getString("clans." + existingClan + ".members").contains(player.getName())) {
+                if (Objects.requireNonNull(clanConfig.getString("clans." + existingClan + ".members")).contains(player.getName())) {
                     plugin.sendPrefixedMessage(player,"You are already in a clan.");
                     return true;
                 }
@@ -289,7 +285,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
 
             List<String> invites = clanConfig.getStringList("clans." + clanName + ".invites");
 
-            if (!invites.stream().anyMatch(invite -> invite.equalsIgnoreCase(playerNameToInvite))) {
+            if (invites.stream().noneMatch(invite -> invite.equalsIgnoreCase(playerNameToInvite))) {
                 invites.add(playerNameToInvite);
                 clanConfig.set("clans." + clanName + ".invites", invites);
                 plugin.saveClanFile();
@@ -410,7 +406,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                 }
             }
 
-            if (clanName == null || senderRole == null) {
+            if (clanName == null) {
                 plugin.sendPrefixedMessage(player,"You are not authorized to promote members in any clan.");
                 return true;
             }
@@ -570,7 +566,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
 
             if (clansSection != null) {
                 for (String existingClan : clansSection.getKeys(false)) {
-                    if (clanConfig.getString("clans." + existingClan + ".leader").equalsIgnoreCase(player.getName()) ||
+                    if (Objects.requireNonNull(clanConfig.getString("clans." + existingClan + ".leader")).equalsIgnoreCase(player.getName()) ||
                             clanConfig.getStringList("clans." + existingClan + ".admins").contains(player.getName())) {
                         clanName = existingClan;
                         senderRole = player.getName().equalsIgnoreCase(clanConfig.getString("clans." + existingClan + ".leader")) ? "leader" : "admin";
@@ -621,12 +617,24 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
             String playerNameToTransfer = args[1].toLowerCase(Locale.ROOT);
             String clanName = null;
 
-            if (clansSection != null) {
-                for (String existingClan : clansSection.getKeys(false)) {
-                    if (player.getName().equalsIgnoreCase(clanConfig.getString("clans." + existingClan + ".leader"))) {
-                        clanName = existingClan;
-                        break;
-                    }
+            // Check if the player is already a leader, member, mod, or admin of any clan
+            assert clansSection != null;
+            for (String existingClan : clansSection.getKeys(false)) {
+                String leader = clanConfig.getString("clans." + existingClan + ".leader");
+                List<String> members = clanConfig.getStringList("clans." + existingClan + ".members");
+                List<String> mods = clanConfig.getStringList("clans." + existingClan + ".mods");
+                List<String> admins = clanConfig.getStringList("clans." + existingClan + ".admins");
+
+                if (playerNameToTransfer.equalsIgnoreCase(leader) || members.contains(playerNameToTransfer) || mods.contains(playerNameToTransfer) || admins.contains(playerNameToTransfer)) {
+                    plugin.sendPrefixedMessage(player, playerNameToTransfer + " is already a leader, member, mod, or admin of a clan.");
+                    return true;
+                }
+            }
+
+            for (String existingClan : clansSection.getKeys(false)) {
+                if (player.getName().equalsIgnoreCase(clanConfig.getString("clans." + existingClan + ".leader"))) {
+                    clanName = existingClan;
+                    break;
                 }
             }
 
@@ -645,12 +653,12 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
             String clanName = args.length > 1 ? args[1] : null;
 
             // Check if the clanConfig is null and clansSection is null
-            if (clanConfig == null || clansSection == null) {
+            if (clansSection == null) {
                 plugin.sendPrefixedMessage(player, "Clans data is not properly initialized.");
                 return true;
             }
 
-            // Find the clan of the player
+            // Find the clan of the player if no clan name is provided
             if (clanName == null) {
                 for (String existingClan : clansSection.getKeys(false)) {
                     if (player.getName().equalsIgnoreCase(clanConfig.getString("clans." + existingClan + ".leader")) ||
@@ -668,11 +676,13 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                 }
             }
 
+            // Check if the specified clan exists
             if (!clanConfig.contains("clans." + clanName)) {
                 plugin.sendPrefixedMessage(player, "This clan does not exist.");
                 return true;
             }
 
+            // Display clan information
             String leader = clanConfig.getString("clans." + clanName + ".leader");
             List<String> members = clanConfig.getStringList("clans." + clanName + ".members");
             List<String> moderators = clanConfig.getStringList("clans." + clanName + ".moderators");
@@ -694,10 +704,6 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(ChatColor.AQUA + "Member: " + admin + " | Rank: " + ChatColor.RED + "Admin");
             }
         }
-
-
-
-
 
         return true;
     }

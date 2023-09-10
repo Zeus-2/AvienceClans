@@ -1,25 +1,21 @@
 package org.avience.avienceclans;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Player;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Arrays;
 import java.io.File;
 import java.io.IOException;
-
-
 import java.util.*;
 
-import java.util.List;
-
 public final class Avienceclans extends JavaPlugin {
-
+    private ClanChat clanChat;
     private File clanFile;
     private FileConfiguration clanConfig;
 
@@ -32,23 +28,34 @@ public final class Avienceclans extends JavaPlugin {
         // Initialize the clan file
         createClanFile();
 
-        // Register the command executor
+        getServer().getPluginManager().registerEvents(new ClanChatListener(this), this);
+
+        // Initialize ClanChat
+        this.clanChat = new ClanChat(this);
+
+        // Register the command executor for /clan
         Objects.requireNonNull(this.getCommand("clan")).setExecutor(new ClanCommand(this));
 
+        // Register the command executor for /clanchat
+        Objects.requireNonNull(this.getCommand("clanchat")).setExecutor(new ClanChatCommandExecutor(this));
 
+        // Initialize ClanCommand and set it as the executor and tab completer for /clan
         ClanCommand clanCommand = new ClanCommand(this);
         Objects.requireNonNull(this.getCommand("clan")).setExecutor(clanCommand);
         Objects.requireNonNull(this.getCommand("clan")).setTabCompleter(clanCommand);
 
+        // PlaceholderAPI support
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new ClanPlaceholder(this).register();
         }
 
+        // Register permissions
         Permission reloadPermission = new Permission("avienceClans.Reload");
         Permission statusPermission = new Permission("avienceClans.Status");
         getServer().getPluginManager().addPermission(reloadPermission);
         getServer().getPluginManager().addPermission(statusPermission);
     }
+
 
     public Map<String, Integer> getClanStatistics() {
         ConfigurationSection clansSection = clanConfig.getConfigurationSection("clans");
@@ -59,8 +66,6 @@ public final class Avienceclans extends JavaPlugin {
         int totalMembers = 0;
         int largestClanSize = 0;
         int smallestClanSize = Integer.MAX_VALUE;
-        String largestClan = "";
-        String smallestClan = "";
 
         for (String clan : clansSection.getKeys(false)) {
             List<String> members = clanConfig.getStringList("clans." + clan + ".members");
@@ -154,6 +159,10 @@ public final class Avienceclans extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ClanChat getClanChat() {
+        return this.clanChat;
     }
 
     public void reloadClanConfig() {

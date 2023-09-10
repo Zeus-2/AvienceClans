@@ -1,10 +1,11 @@
 package org.avience.avienceclans;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class ClanPlaceholder extends PlaceholderExpansion {
 
-    private Avienceclans plugin;
+    private final Avienceclans plugin;
 
     public ClanPlaceholder(Avienceclans plugin) {
         this.plugin = plugin;
@@ -16,22 +17,22 @@ public class ClanPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return "YourName";
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "avienceclans";
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return "1.0";
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
+    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
         if (player == null) {
             return "";
         }
