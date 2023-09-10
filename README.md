@@ -8,14 +8,14 @@ AvienceClans is a Minecraft plugin that provides a comprehensive clan system. Cr
 - Member Management: Invite, kick, promote, and demote members.
 - Clan Chat: A dedicated chat for clan members.
 - Clan Info: View detailed information about any clan.
+- Clan Ranks: Allows clan leaders to set ranks for their members.
 - And More: There are many more features to explore!
 
 ## 📦 Installation (WIP)
 1. Download the latest release of the plugin
 2. Place the downloaded .jar file into your server's plugins folder.
 3. Restart your server.
-4. bash
-5. Copy code
+
 ### Navigate to your server's plugins folder
 cd path/to/your/server/plugins
 
@@ -39,13 +39,11 @@ Here are some of the commands you can use:
 For a complete list of commands and their descriptions, type `/clan help`.
 
 ## 🛠️ Permissions
-| Permission            | Description                        |
-| --------------------- | ---------------------------------- |
-| `avienceclans.create` |	Allows creating a clan             |
-| `avienceclans.delete`	| Allows deleting a clan             |
-| `avienceclans.invite` | Allows inviting players to a clan  |
-| `avienceclans.kick`   |	Allows kicking members from a clan |
-| `avienceclans.admin`  | Grants all permissions             |
+| Permission            | Description                            |
+| --------------------- | -------------------------------------- |
+| `avienceclans.reload` |	Reloads the plugin                     |
+| `avienceclans.status`	| Shows infomation about all the clans   |
+
 
 ## ⚙️ Configuration
 AvienceClans uses a YAML configuration file which you can find in the plugins/AvienceClans directory after the first run. You can customize various settings like clan size limits, clan name restrictions, etc.
