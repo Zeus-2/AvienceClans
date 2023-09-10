@@ -11,10 +11,10 @@ AvienceClans is a Minecraft plugin that provides a comprehensive clan system. Cr
 - Clan Ranks: Allows clan leaders to set ranks for their members.
 - And More: There are many more features to explore!
 
-## 📦 Installation (WIP)
-1. Download the latest release of the plugin
-2. Place the downloaded .jar file into your server's plugins folder.
-3. Restart your server.
+## 📦 Installation
+1. Download the [Latest Release](https://github.com/Zeus-2/AvienceClans/releases) or a [Development Build](https://github.com/Zeus-2/AvienceClans/actions)
+2. Move the downloaded .jar file to your server plugin folder
+3. Restart your server
 
 ### Navigate to your server's plugins folder
 cd path/to/your/server/plugins
