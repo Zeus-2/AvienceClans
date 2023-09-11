@@ -1,0 +1,6 @@
+org\avience\avienceclans\ClanCommand.class
+org\avience\avienceclans\ClanChat.class
+org\avience\avienceclans\Avienceclans.class
+org\avience\avienceclans\ClanChatListener.class
+org\avience\avienceclans\ClanPlaceholder.class
+org\avience\avienceclans\ClanChatCommandExecutor.class

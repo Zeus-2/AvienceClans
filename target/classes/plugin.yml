@@ -21,3 +21,5 @@ commands:
       uninvite: "Uninvite a player from your clan."
       clearinvites: "Clear all pending invites for your clan."
       join: "Join a clan you've been invited to."
+  clanchat:
+    description: "Toggle or send messages in clan chat."
