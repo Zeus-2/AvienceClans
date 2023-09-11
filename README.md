@@ -35,6 +35,7 @@ Here are some of the commands you can use:
 | `/clan info [clanName]`	     | Show information about a clan      |
 | `/clan join <clanName>`	     | Join a clan you've been invited to |
 | `/clan leave`              	 | Leave your current clan            |
+| `/clanChat`              	   | Toggles clanchat on and off        |
 
 For a complete list of commands and their descriptions, type `/clan help`.
 
