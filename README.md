@@ -1,7 +1,7 @@
 # AvienceClans
 
 
-AvienceClans is a 1.20.1+ Minecraft plugin that provides a comprehensive clan system. Create, manage, and grow your clan with ease. Invite friends, promote members, and much more!
+AvienceClans is a Minecraft 1.20.1+ plugin that provides a comprehensive clan system. Create, manage, and grow your clan with ease. Invite friends, promote members, and much more!
 
 ## 🌟 Features
 - Clan Creation: Create your own clan with a unique name.
