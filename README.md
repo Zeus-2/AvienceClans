@@ -35,7 +35,8 @@ Here are some of the commands you can use:
 | `/clan info [clanName]`	     | Show information about a clan      |
 | `/clan join <clanName>`	     | Join a clan you've been invited to |
 | `/clan leave`              	 | Leave your current clan            |
-| `/clanChat`              	   | Toggles clanchat on and off        |
+| `/clanChat toogle`           | Toggles clanchat on and off        |
+| `/clanChat spy`              | Toggles clanchat spy on and off    |
 
 For a complete list of commands and their descriptions, type `/clan help`.
 
@@ -44,7 +45,7 @@ For a complete list of commands and their descriptions, type `/clan help`.
 | --------------------- | -------------------------------------- |
 | `avienceclans.reload` |	Reloads the plugin                     |
 | `avienceclans.status`	| Shows infomation about all the clans   |
-
+| `avienceclans.spy`	  | Clanchat spy toggle                     |
 
 ## ⚙️ Configuration
 AvienceClans uses a YAML configuration file which you can find in the plugins/AvienceClans directory after the first run. You can customize various settings like clan size limits, clan name restrictions, etc.
