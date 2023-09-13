@@ -1,8 +1,10 @@
 package org.avience.avienceclans;
 
+import org.avience.avienceclans.ClanChat.ClanChat;
+import org.avience.avienceclans.ClanChat.ClanChatCommandExecutor;
+import org.avience.avienceclans.ClanChat.ClanChatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,8 +38,12 @@ public final class Avienceclans extends JavaPlugin {
         // Register the command executor for /clan
         Objects.requireNonNull(this.getCommand("clan")).setExecutor(new ClanCommand(this));
 
-        // Register the command executor for /clanchat
+        // Initialize ClanChat
+        this.clanChat = new ClanChat(this);
+
+        // Register the command executor and tab completer for /clanchat
         Objects.requireNonNull(this.getCommand("clanchat")).setExecutor(new ClanChatCommandExecutor(this));
+        Objects.requireNonNull(this.getCommand("clanchat")).setTabCompleter(this.clanChat);
 
         // Initialize ClanCommand and set it as the executor and tab completer for /clan
         ClanCommand clanCommand = new ClanCommand(this);

@@ -11,6 +11,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import java.util.*;
 
 public class ClanCommand implements CommandExecutor, TabCompleter {
@@ -28,7 +31,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
         if (command.getName().equalsIgnoreCase("clan")) {
             if (args.length == 1) {
                 list.add("create");
-                list.add("delete");
+                list.add("disband");
                 list.add("promote");
                 list.add("kick");
                 list.add("demote");
@@ -47,11 +50,14 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
 
 
     private void showHelpMessage(Player player, int page) {
-        player.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "Plugin usage (Page " + page + "):" + ChatColor.GRAY + "]");
+        int totalPages = 3; // Total number of help pages
+
+        // Header
+        player.sendMessage(ChatColor.GRAY + "------[" + ChatColor.GOLD + "Plugin usage (Page " + page + "/" + totalPages + ")" + ChatColor.GRAY + "]------");
 
         if (page == 1) {
             player.sendMessage(ChatColor.AQUA + "/clan create <name> - Create a new clan");
-            player.sendMessage(ChatColor.AQUA + "/clan delete - Delete your clan");
+            player.sendMessage(ChatColor.AQUA + "/clan disband - Delete your clan");
             player.sendMessage(ChatColor.AQUA + "/clan invite <playerName> - Invite a player to your clan");
             player.sendMessage(ChatColor.AQUA + "/clan kick <playerName> - Kick a member from your clan");
         } else if (page == 2) {
@@ -66,6 +72,16 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(ChatColor.AQUA + "/clan leave - Leave your current clan");
         } else {
             player.sendMessage(ChatColor.RED + "Invalid page number.");
+            return; // Exit the method here to avoid showing the footer for an invalid page
+        }
+
+// Footer
+        player.sendMessage(ChatColor.GRAY + "-----------------------------------------------------");
+
+        if (page < totalPages) {
+            TextComponent nextPageMessage = new TextComponent(ChatColor.GRAY + "Click " + ChatColor.GREEN + "[HERE]" + ChatColor.GRAY + " to go to the next page.");
+            nextPageMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/clan help " + (page + 1)));
+            player.spigot().sendMessage(nextPageMessage);
         }
     }
 
@@ -203,7 +219,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
         }
 
 // Delete command
-        if ("delete".equalsIgnoreCase(args[0])) {
+        if ("disband".equalsIgnoreCase(args[0])) {
             String clanName = null;
 
             if (clansSection != null) {
@@ -488,8 +504,19 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                         members.add(player.getName());
                         clanConfig.set("clans." + matchingClan.get() + ".members", members);
 
+                        // Save the updated clan configuration
                         plugin.saveClanFile();
+
+                        // Inform the player that they have joined the clan
                         plugin.sendPrefixedMessage(player, "You have joined clan " + matchingClan.get() + ".");
+
+                        // Inform the entire clan that the player has joined
+                        for (String memberName : members) {
+                            Player memberPlayer = Bukkit.getPlayer(memberName);
+                            if (memberPlayer != null && memberPlayer.isOnline()) {
+                                plugin.sendPrefixedMessage(memberPlayer, player.getName() + " has joined the clan!");
+                            }
+                        }
                     } else {
                         // Player was not invited to join
                         plugin.sendPrefixedMessage(player, "You have not been invited to join clan " + matchingClan.get() + ".");
@@ -533,7 +560,7 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
 
             String roleOfTarget = clanConfig.getString("clans." + clanName + ".members." + playerNameToKick + ".role");
 
-            // Check if the command sender is a leader, admin, or moderator and has the authority to kick the target player
+
             if ("leader".equalsIgnoreCase(roleOfCommandSender) ||
                     ("admin".equalsIgnoreCase(roleOfCommandSender) && !"admin".equalsIgnoreCase(roleOfTarget)) ||
                     ("moderator".equalsIgnoreCase(roleOfCommandSender) && !"admin".equalsIgnoreCase(roleOfTarget) && !"moderator".equalsIgnoreCase(roleOfTarget))) {
@@ -545,11 +572,24 @@ public class ClanCommand implements CommandExecutor, TabCompleter {
                     clanConfig.set("clans." + clanName, clanSection);
                 }
 
+                // Save the updated clan configuration
                 plugin.saveClanFile();
+
+                // Inform the player that they have kicked someone from the clan
                 plugin.sendPrefixedMessage(player,"Player " + playerNameToKick + " has been kicked from clan " + clanName + ".");
+
+                // Inform the entire clan that the player has been kicked
+                List<String> members = clanConfig.getStringList("clans." + clanName + ".members");
+                for (String memberName : members) {
+                    Player memberPlayer = Bukkit.getPlayer(memberName);
+                    if (memberPlayer != null && memberPlayer.isOnline()) {
+                        plugin.sendPrefixedMessage(memberPlayer, playerNameToKick + " has been kicked from the clan!");
+                    }
+                }
             } else {
                 plugin.sendPrefixedMessage(player,"You do not have permission to kick this member.");
             }
+
         }
 
 
