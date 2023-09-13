@@ -24,26 +24,28 @@ Place the downloaded .jar file there
 ## 🎮 Usage
 Here are some of the commands you can use:
 
-| Command                      | Description                        |
-| ---------------------------- | ---------------------------------- |
-| `/clan create <name>`      	 | Create a new clan                  |
-| `/clan delete`               | Delete your clan                   |
-| `/clan invite <playerName>`	 | Invite a player to your clan       |
-| `/clan kick <playerName>`	   | Kick a member from your clan       |
-| `/clan promote <playerName>` | Promote a member in your clan      |
-| `/clan demote <playerName>`	 | Demote a member in your clan       |
-| `/clan info [clanName]`	     | Show information about a clan      |
-| `/clan join <clanName>`	     | Join a clan you've been invited to |
-| `/clan leave`              	 | Leave your current clan            |
-| `/clanChat`              	   | Toggles clanchat on and off        |
+| Command                           | Description                        |
+|-----------------------------------|------------------------------------|
+| `/clan create <name>`      	      | Create a new clan                  |
+| `/clan delete`                    | Delete your clan                   |
+| `/clan invite <playerName>`	      | Invite a player to your clan       |
+| `/clan kick <playerName>`	        | Kick a member from your clan       |
+| `/clan promote <playerName>`      | Promote a member in your clan      |
+| `/clan demote <playerName>`	      | Demote a member in your clan       |
+| `/clan info [clanName]`	          | Show information about a clan      |
+| `/clan join <clanName>`	          | Join a clan you've been invited to |
+| `/clan leave`              	      | Leave your current clan            |
+| `/clanChat toggle`              	 | Toggles clanchat on and off        |
+| `/clanChat spy`              	    | Toggles clanchat spy on and off    |
 
 For a complete list of commands and their descriptions, type `/clan help`.
 
 ## 🛠️ Permissions
-| Permission            | Description                            |
-| --------------------- | -------------------------------------- |
-| `avienceclans.reload` |	Reloads the plugin                     |
-| `avienceclans.status`	| Shows infomation about all the clans   |
+| Permission             | Description                             |
+|------------------------|-----------------------------------------|
+| `avienceclans.reload`  | 	Reloads the plugin                     |
+| `avienceclans.status`	 | Shows information about all the clans   |
+| `avienceclans.spy`	    | Allows user to spy on clanchat messages |
 
 
 ## ⚙️ Configuration
