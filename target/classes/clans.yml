@@ -1,0 +1,8 @@
+clans:
+  example:
+    leader: 00000000-cd94-4328-a971-51dbb8b55624
+    members: []
+    moderators: []
+    admins: []
+    invites:
+    - 00000000-cd94-4328-a971-51dbb8b55624

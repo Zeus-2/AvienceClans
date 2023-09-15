@@ -1,25 +1,62 @@
 name: avienceclans
-version: '${project.version}'
+version: '1.0'
 main: org.avience.avienceclans.Avienceclans
-api-version: '1.20'
-description: A plugin for managing Minecraft clans.
+api-version: '1.19'
+description: A clan management plugin for Minecraft servers.
+author: zeus2
+softdepend: [Geyser-Spigot, Floodgate]
 
 commands:
   clan:
-    description: Clan management command.
-    usage: /<command> [sub-command] [arguments]
-    aliases: [clans]
-    sub-commands:
-      create: "Create a new clan."
-      add: "Add a player to your clan."
-      promote: "Promote a member in your clan."
-      kick: "Kick a member from your clan."
-      demote: "Demote a member in your clan."
-      transfer: "Transfer clan ownership."
-      info: "Display clan information."
-      invite: "Invite a player to your clan."
-      uninvite: "Uninvite a player from your clan."
-      clearinvites: "Clear all pending invites for your clan."
-      join: "Join a clan you've been invited to."
+    description: Manage your clan.
+    usage: /<command> <create|delete|invite|kick|promote|demote|info|join|leave>
+    permission: avienceClans.clan
   clanchat:
-    description: "Toggle or send messages in clan chat."
+    description: Manage clan chat settings.
+    usage: /<command> <toggle|spy>
+    aliases: [cchat, clanmessage]
+    permission: avienceClans.clanchat
+
+permissions:
+  avienceClans.reload:
+    description: Reloads the plugin
+    default: op
+  avienceClans.status:
+    description: Shows information about all the clans
+    default: op
+  avienceClans.spy:
+    description: Allows user to spy on clanchat messages
+    default: op
+  avienceClans.clan.create:
+    description: Create a new clan
+    default: true
+  avienceClans.clan.delete:
+    description: Delete your clan
+    default: true
+  avienceClans.clan.invite:
+    description: Invite a player to your clan
+    default: true
+  avienceClans.clan.kick:
+    description: Kick a member from your clan
+    default: true
+  avienceClans.clan.promote:
+    description: Promote a member in your clan
+    default: true
+  avienceClans.clan.demote:
+    description: Demote a member in your clan
+    default: true
+  avienceClans.clan.info:
+    description: Show information about a clan
+    default: true
+  avienceClans.clan.join:
+    description: Join a clan you've been invited to
+    default: true
+  avienceClans.clan.leave:
+    description: Leave your current clan
+    default: true
+  avienceClans.clanchat.toggle:
+    description: Toggles clanchat on and off
+    default: true
+  avienceClans.clanchat.spy:
+    description: Toggles clanchat spy on and off
+    default: op
